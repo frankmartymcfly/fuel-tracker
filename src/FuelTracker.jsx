@@ -246,8 +246,25 @@ export default function FuelTracker() {
     const file = e.target.files?.[0]; if (!file) return;
     setScanError(""); setScanning(true); setScanned(false); setShowForm(true);
     try {
-      const mediaType = file.type || "image/jpeg";
-      const base64 = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(",")[1]); r.onerror = () => rej(new Error("Read error")); r.readAsDataURL(file); });
+      const mediaType = "image/jpeg";
+      const base64 = await new Promise((res, rej) => {
+  const img = new Image();
+  img.onload = () => {
+    const MAX = 1280;
+    let w = img.width, h = img.height;
+    if (w > MAX || h > MAX) {
+      if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+      else { w = Math.round(w * MAX / h); h = MAX; }
+    }
+    const c = document.createElement("canvas");
+    c.width = w; c.height = h;
+    c.getContext("2d").drawImage(img, 0, 0, w, h);
+    res(c.toDataURL("image/jpeg", 0.7).split(",")[1]);
+    URL.revokeObjectURL(img.src);
+  };
+  img.onerror = () => rej(new Error("Read error"));
+  img.src = URL.createObjectURL(file);
+});
       setPreview(`data:${mediaType};base64,${base64}`);
       const result = await api("/api/scan", { method: "POST", body: { image: base64, mediaType } }, secret);
       const today = new Date().toISOString().split("T")[0];
