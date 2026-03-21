@@ -286,7 +286,7 @@ export default function FuelTracker() {
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(145deg, #0a0a1a 0%, #0f0f2a 50%, #0a0a1a 100%)", color: "#e0e0e0", fontFamily: "'DM Sans', 'Segoe UI', sans-serif", padding: "24px 16px" }}>
       <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-      <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={handlePhotoSelect} style={{ display: "none" }} />
+      <input ref={fileRef} type="file" accept="image/*"  onChange={handlePhotoSelect} style={{ display: "none" }} />
 
       <div style={{ maxWidth: 640, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
